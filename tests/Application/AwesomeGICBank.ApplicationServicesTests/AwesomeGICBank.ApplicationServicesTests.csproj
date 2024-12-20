@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Application\AwesomeGICBank.ApplicationServices\AwesomeGICBank.ApplicationServices.csproj" />
+    <ProjectReference Include="..\..\..\Application\AwesomeGICBank.ApplicationServices\AwesomeGICBank.ApplicationServices.csproj" />
   </ItemGroup>
 
   <ItemGroup>
