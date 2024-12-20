@@ -7,8 +7,3 @@ public interface IAccountRepository
     public Task CreateAsync(Account account);
 }
 
-public interface ITransactionRepository
-{
-    public string GetMaximumTransactionNo(DateOnly transactionDate);
-}
-

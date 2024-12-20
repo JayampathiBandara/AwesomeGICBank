@@ -13,7 +13,7 @@ public class TransactionDomainService : ITransactionDomainService
 
     public TransactionId GenerateNextTransactionId(DateOnly date)
     {
-        var latestNumber = _transactionRepository.GetMaximumTransactionNo(date);
+        var latestNumber = _transactionRepository.GetMaximumTransactionNoAsync(date);
 
         var nextNumber = (latestNumber is null) ? 1 : uint.Parse(latestNumber.Split("-")[1]) + 1;
 

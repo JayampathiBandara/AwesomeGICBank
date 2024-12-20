@@ -22,7 +22,7 @@ public class TransactionDomainServiceTests
         // Arrange
         var testDate = new DateOnly(2024, 12, 20);
         _transactionRepository
-            .Setup(x => x.GetMaximumTransactionNo(testDate))
+            .Setup(x => x.GetMaximumTransactionNoAsync(testDate))
             .Returns((string)null);
 
         // Act
@@ -43,7 +43,7 @@ public class TransactionDomainServiceTests
         // Arrange
         var transactionDate = new DateOnly(2024, 12, 20);
         _transactionRepository
-            .Setup(x => x.GetMaximumTransactionNo(transactionDate))
+            .Setup(x => x.GetMaximumTransactionNoAsync(transactionDate))
             .Returns(latestTransactioId);
 
         // Act
