@@ -10,7 +10,7 @@ public static class TransactionDtoParser
     /// <param name="input">Input Format : 20230626 AC001 W 100.00</param>
     /// <returns></returns>
     /// <exception cref="ArgumentException"></exception>
-    public static TransactionDto Parse(string? input)
+    public static TransactionDto Parse(string input)
     {
         if (string.IsNullOrEmpty(input))
             throw new ArgumentNullException(nameof(input));
@@ -19,7 +19,7 @@ public static class TransactionDtoParser
 
         if (transactionDetails.Length != 4)
         {
-            throw new ArgumentException("Invalid input format. Expected: <Date> <Account> <Type> <Amount>");
+            throw new FormatException("Invalid input format. Expected: <Date> <Account> <Type> <Amount>");
         }
 
         return new TransactionDto
