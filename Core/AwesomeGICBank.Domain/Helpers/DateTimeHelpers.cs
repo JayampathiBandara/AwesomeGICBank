@@ -12,7 +12,6 @@ public static class DateTimeHelpers
 
         string format = "yyyyMMdd";
         CultureInfo provider = CultureInfo.InvariantCulture;
-
         if (DateOnly.TryParseExact(date, format, provider, DateTimeStyles.None, out DateOnly result))
             return result;
 

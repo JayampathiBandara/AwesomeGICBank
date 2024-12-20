@@ -3,6 +3,7 @@ using AwesomeGICBank.Domain.Helpers;
 
 namespace AwesomeGICBank.DomainTests.Helpers;
 
+
 public class DateTimeHelpersTests
 {
     [Theory]

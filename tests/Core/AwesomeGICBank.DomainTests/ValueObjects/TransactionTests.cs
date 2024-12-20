@@ -12,7 +12,8 @@ public class TransactionTests
     public void Transaction_ShouldCreateAnTransaction_WhenTransactionNumberIsValid()
     {
         // Arrange
-        string transactionId = "20230505-01";
+        var theDate = new DateOnly(2024, 12, 21);
+        var transactionId = new TransactionId(theDate, 2);
 
         // Act
         var transaction = new Transaction(transactionId, TransactionType.Deposit, 100M, DateTimeHelpers.ConvertDateStringToDateOnly("20230505"));
@@ -22,11 +23,13 @@ public class TransactionTests
         Assert.Equal(100, transaction.Amount);
     }
 
-    [Theory]
-    [InlineData(null)]
-    [InlineData("")]
-    public void Transaction_ShouldThrowArgumentNullException_WhenTransactionNumberIsNullOrEmpty(string transactionId)
+    [Fact]
+    public void Transaction_ShouldThrowArgumentNullException_WhenTransactionNumberIsNull()
     {
+        //Arange 
+        TransactionId transactionId = null;
+
+        // Act & Assert
         Assert.Throws<ArgumentNullException>(() => new Transaction(transactionId, TransactionType.Deposit, 100M, DateTimeHelpers.ConvertDateStringToDateOnly("20230505")));
     }
 
@@ -36,7 +39,8 @@ public class TransactionTests
     public void Transaction_ShouldThrowInvalidAmountException_WhenTransactionAmountIsZeroOrMinus(decimal amount)
     {
         // Arrange
-        string transactionId = "20230505-01";
+        var theDate = new DateOnly(2024, 12, 21);
+        var transactionId = new TransactionId(theDate, 2);
 
         Assert.Throws<InvalidAmountException>(() => new Transaction(transactionId, TransactionType.Deposit, amount, DateTimeHelpers.ConvertDateStringToDateOnly("20230505")));
     }
