@@ -37,6 +37,12 @@ public class BaseResponse
             Messages.Add(error.ErrorMessage);
         }
     }
+
+    public override string ToString()
+    {
+        return $"{ResponseType} \n {string.Join("\n", Messages)}";
+
+    }
 }
 
 public class BaseResponse<T> : BaseResponse where T : class?

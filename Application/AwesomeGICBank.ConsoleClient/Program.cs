@@ -1,6 +1,8 @@
 ﻿using AwesomeGICBank.ApplicationServices;
 using AwesomeGICBank.ApplicationServices.Common.Parsers;
 using AwesomeGICBank.ApplicationServices.Features.AccountTransaction.Commands.Create;
+using AwesomeGICBank.ApplicationServices.Features.InterestRules.Commands.Create;
+using AwesomeGICBank.ApplicationServices.Responses;
 using AwesomeGICBank.ConsoleClient.Enums;
 using AwesomeGICBank.ConsoleClient.Helpers;
 using AwesomeGICBank.DomainServices;
@@ -30,7 +32,6 @@ public class Program
         // Get mediator instance
         _mediator = serviceProvider.GetRequiredService<IMediator>();
 
-
         var bankOpen = true;
         while (bankOpen)
         {
@@ -46,25 +47,43 @@ public class Program
             {
                 var operation = InputOperationReader.ReadOperation();
 
+                string input;
+                BaseResponse response;
                 switch (operation)
                 {
                     case Operation.InputTransactions:
                         Console.WriteLine("\nPlease enter transaction details in <Date> <Account> <Type> <Amount> format \n(or enter blank to go back to main menu):");
-                        var input = Console.ReadLine();
+                        input = Console.ReadLine();
+                        if (string.IsNullOrEmpty(input))
+                            break;
                         var transactionDto = TransactionDtoParser.Parse(input);
-                        await _mediator.Send(
+                        response = await _mediator.Send(
                             new CreateAccountTransactionCommand()
                             {
                                 Transaction = transactionDto
                             });
+
+                        Console.WriteLine(response.ToString());
+
                         break;
                     case Operation.DefineInterestRules:
-                        Console.WriteLine(operation);
+                        Console.Write("\nPlease enter interest rules details in <Date> <RuleId> <Rate in %> format \r\n(or enter blank to go back to main menu):\r\n>");
+                        input = Console.ReadLine();
+                        if (string.IsNullOrEmpty(input))
+                            break;
+                        var interestRuleDto = InterestRuleDtoParser.Parse(input);
+                        response = await _mediator.Send(
+                            new CreateInterestRuleCommand()
+                            {
+                                InterestRule = interestRuleDto
+                            });
+                        Console.WriteLine(response.ToString());
                         break;
                     case Operation.PrintStaqtement:
                         Console.WriteLine(operation);
                         break;
                     case Operation.Quit:
+                        Console.WriteLine("\nThank you for banking with AwesomeGIC Bank.\r\nHave a nice day!");
                         bankOpen = false;
                         break;
                     default:

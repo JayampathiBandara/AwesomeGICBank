@@ -38,8 +38,8 @@ public class AmountHelpersTests
     public void ConvertToAmount_ShouldThrowInvalidAmountException_WhenAmountIsNotAValidNumber(string amount)
     {
         // Act & Assert
-        var exception = Assert.Throws<InvalidAmountException>(() => AmountHelpers.ConvertToAmount(amount));
-        Assert.Contains($"Invalid amount format: {amount}", exception.Message);
+        var exception = Assert.Throws<InvalidNumberException>(() => AmountHelpers.ConvertToAmount(amount));
+        Assert.Contains($"{amount} is an invalid decimal number", exception.Message);
     }
 
     [Theory]

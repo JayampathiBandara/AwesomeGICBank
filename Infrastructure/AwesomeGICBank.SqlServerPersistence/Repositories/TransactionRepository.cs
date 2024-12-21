@@ -1,12 +1,11 @@
 ﻿using AwesomeGICBank.DomainServices.Services.Persistence;
 
-namespace AwesomeGICBank.SqlServerPersistence.Repositories
+namespace AwesomeGICBank.SqlServerPersistence.Repositories;
+
+public class TransactionRepository : ITransactionRepository
 {
-    public class TransactionRepository : ITransactionRepository
+    public string GetMaximumTransactionNoAsync(DateOnly transactionDate)
     {
-        public string GetMaximumTransactionNoAsync(DateOnly transactionDate)
-        {
-            return transactionDate.ToString("yyyyMMdd") + "-01";
-        }
+        return transactionDate.ToString("yyyyMMdd") + "-01";
     }
 }

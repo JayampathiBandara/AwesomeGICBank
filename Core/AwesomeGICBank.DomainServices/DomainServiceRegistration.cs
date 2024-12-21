@@ -8,6 +8,7 @@ public static class DomainServiceRegistration
     public static IServiceCollection AddDomainServices(this IServiceCollection services)
     {
         services.AddScoped<ITransactionDomainService, TransactionDomainService>();
+        services.AddScoped<IInterestRuleDomainService, InterestRuleDomainService>();
 
         return services;
     }

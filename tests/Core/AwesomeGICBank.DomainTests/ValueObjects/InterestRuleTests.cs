@@ -12,15 +12,17 @@ public class InterestRuleTests
     [InlineData("")]
     public void InterestRule_ShouldThrowArgumentNullException_WhenInterestRuleIdIsNullOrEmpty(string ruleId)
     {
-        Assert.Throws<ArgumentNullException>(() => new InterestRule(ruleId, DateTimeHelpers.ConvertDateStringToDateOnly("20230505"), 1.5M));
+        Assert.Throws<ArgumentNullException>(() => new InterestRule(DateTimeHelpers.ConvertDateStringToDateOnly("20230505"), 1, ruleId, 1.5M));
     }
 
     [Theory]
     [InlineData(0)]
     [InlineData(-1)]
+    [InlineData(100)]
+    [InlineData(101)]
     public void InterestRule_ShouldThrowInvalidRateException_WhenInterestRateValueIsZeroOrMinus(decimal rate)
     {
-        Assert.Throws<InvalidRateException>(() => new InterestRule("RULE03", DateTimeHelpers.ConvertDateStringToDateOnly("20230505"), rate));
+        Assert.Throws<InvalidRateException>(() => new InterestRule(DateTimeHelpers.ConvertDateStringToDateOnly("20230505"), 1, "RULE03", rate));
     }
     #endregion
 }
