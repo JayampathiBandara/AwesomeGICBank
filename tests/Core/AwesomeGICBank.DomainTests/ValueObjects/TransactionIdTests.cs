@@ -19,7 +19,7 @@ public class TransactionIdTests
         var transactionId = new TransactionId(theDate, SeqNo);
 
         // Assert
-        Assert.Equal($"20241221_{SeqNumber}", transactionId.Value);
+        Assert.Equal($"20241221-{SeqNumber}", transactionId.Value);
     }
     #endregion
 }

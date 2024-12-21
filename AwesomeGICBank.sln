@@ -25,13 +25,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AwesomeGICBank.ConsoleClien
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AwesomeGICBank.ApplicationServices", "Application\AwesomeGICBank.ApplicationServices\AwesomeGICBank.ApplicationServices.csproj", "{56A8D815-C176-4002-9F20-1F6663047885}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AwesomeGICBank.DomainServicesTests", "tests\Core\AwesomeGICBank.DomainServicesTests\AwesomeGICBank.DomainServicesTests.csproj", "{B25D260B-BC69-4742-BBF6-FF3042E49ACB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AwesomeGICBank.DomainServicesTests", "tests\Core\AwesomeGICBank.DomainServicesTests\AwesomeGICBank.DomainServicesTests.csproj", "{B25D260B-BC69-4742-BBF6-FF3042E49ACB}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application", "{54BE13B4-C49E-4B23-B829-F6975E3E5AA0}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AwesomeGICBank.ApplicationServicesTests", "tests\Application\AwesomeGICBank.ApplicationServicesTests\AwesomeGICBank.ApplicationServicesTests.csproj", "{DAFCFFFE-876E-4A98-9158-5CA65650F414}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AwesomeGICBank.SqlServerPersistence", "Infrastructure\AwesomeGICBank.SqlServerPersistence\AwesomeGICBank.SqlServerPersistence.csproj", "{A82A0F09-29C3-4574-B4F2-ECDE01349596}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AwesomeGICBank.SqlServerPersistence", "Infrastructure\AwesomeGICBank.SqlServerPersistence\AwesomeGICBank.SqlServerPersistence.csproj", "{A82A0F09-29C3-4574-B4F2-ECDE01349596}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AwesomeGICBank.InMemoryPersistence", "AwesomeGICBank.InMemoryPersistence\AwesomeGICBank.InMemoryPersistence.csproj", "{F769B867-AE27-48BC-8839-EB8FA1618746}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -71,6 +73,10 @@ Global
 		{A82A0F09-29C3-4574-B4F2-ECDE01349596}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A82A0F09-29C3-4574-B4F2-ECDE01349596}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A82A0F09-29C3-4574-B4F2-ECDE01349596}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F769B867-AE27-48BC-8839-EB8FA1618746}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F769B867-AE27-48BC-8839-EB8FA1618746}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F769B867-AE27-48BC-8839-EB8FA1618746}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F769B867-AE27-48BC-8839-EB8FA1618746}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -89,6 +95,7 @@ Global
 		{54BE13B4-C49E-4B23-B829-F6975E3E5AA0} = {87648AB2-E003-4AF1-ADCF-1E5B25F12FDF}
 		{DAFCFFFE-876E-4A98-9158-5CA65650F414} = {54BE13B4-C49E-4B23-B829-F6975E3E5AA0}
 		{A82A0F09-29C3-4574-B4F2-ECDE01349596} = {5D00B41F-05DF-4FA8-BF8C-6FE8E5F23C1D}
+		{F769B867-AE27-48BC-8839-EB8FA1618746} = {5D00B41F-05DF-4FA8-BF8C-6FE8E5F23C1D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {751BB2B7-315C-4B01-8CCA-715F2A08E22E}

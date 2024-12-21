@@ -6,7 +6,8 @@ using AwesomeGICBank.ApplicationServices.Responses;
 using AwesomeGICBank.ConsoleClient.Enums;
 using AwesomeGICBank.ConsoleClient.Helpers;
 using AwesomeGICBank.DomainServices;
-using AwesomeGICBank.SqlServerPersistence;
+//using AwesomeGICBank.SqlServerPersistence;
+using AwesomeGICBank.InMemoryPersistence;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -22,7 +23,8 @@ public class Program
 
         services.AddDomainServices();
 
-        services.AddPersistenceServices();
+        //services.AddPersistenceServices();
+        services.AddInMemoryPersistenceServices();
 
         services.AddApplicationServices();
 

@@ -9,6 +9,12 @@ public class Account
     private readonly List<Transaction> _transactions;
 
     public string AccountNo { get; private set; }
+
+    public IReadOnlyList<Transaction> Transactions
+    {
+        get { return _transactions; }
+    }
+
     public decimal Balance => _transactions
         .Sum(x =>
         {
@@ -18,7 +24,6 @@ public class Account
                 return -1 * x.Amount;
             else return 0;
         });
-
 
     public Account(string accountNo)
     {

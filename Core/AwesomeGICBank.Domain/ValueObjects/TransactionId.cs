@@ -6,6 +6,6 @@ public class TransactionId
 
     public TransactionId(DateOnly date, uint sequence)
     {
-        Value = $"{date:yyyyMMdd}_{sequence:D2}";
+        Value = $"{date:yyyyMMdd}-{sequence:D2}";
     }
 }

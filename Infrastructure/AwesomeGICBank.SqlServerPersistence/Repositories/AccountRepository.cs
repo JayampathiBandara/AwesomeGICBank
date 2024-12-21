@@ -9,4 +9,14 @@ public class AccountRepository : IAccountRepository
     {
         return Task.CompletedTask;
     }
+
+    public Task<Account> GetAsync(string accountNo)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<Account> GetAsync(string accountNo, DateOnly TransactionDate)
+    {
+        throw new NotImplementedException();
+    }
 }

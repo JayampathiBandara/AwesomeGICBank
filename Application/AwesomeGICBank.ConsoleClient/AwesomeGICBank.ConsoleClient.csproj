@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\AwesomeGICBank.InMemoryPersistence\AwesomeGICBank.InMemoryPersistence.csproj" />
     <ProjectReference Include="..\..\Core\AwesomeGICBank.DomainServices\AwesomeGICBank.DomainServices.csproj" />
     <ProjectReference Include="..\..\Core\AwesomeGICBank.Domain\AwesomeGICBank.Domain.csproj" />
     <ProjectReference Include="..\..\Infrastructure\AwesomeGICBank.SqlServerPersistence\AwesomeGICBank.SqlServerPersistence.csproj" />
