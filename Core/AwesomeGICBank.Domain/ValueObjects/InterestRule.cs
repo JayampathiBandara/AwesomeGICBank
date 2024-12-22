@@ -4,24 +4,23 @@ namespace AwesomeGICBank.Domain.ValueObjects;
 
 public class InterestRule
 {
-    public string Name { get; set; }
+    public string RuleId { get; set; }
     public DateOnly Date { get; set; }
-    public int SequenceNumber { get; set; }
+
     public decimal Rate { get; set; }
 
     protected InterestRule() { }
 
-    public InterestRule(DateOnly date, int sequenceNumber, string name, decimal rate)
+    public InterestRule(DateOnly date, string ruleId, decimal rate)
     {
-        if (string.IsNullOrEmpty(name))
-            throw new ArgumentNullException(nameof(name));
+        if (string.IsNullOrEmpty(ruleId))
+            throw new ArgumentNullException(nameof(ruleId));
 
         if (rate <= 0 || rate >= 100)
             throw new InvalidRateException(rate);
 
         Date = date;
-        SequenceNumber = sequenceNumber;
-        Name = name;
+        RuleId = ruleId;
         Rate = rate;
     }
 }

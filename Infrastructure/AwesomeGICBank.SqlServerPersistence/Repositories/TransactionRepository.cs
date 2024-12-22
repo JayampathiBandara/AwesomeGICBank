@@ -48,7 +48,6 @@ public class TransactionRepository : BaseRepository, ITransactionRepository
     {
         var transactions = await _dbContext.Transactions
             .Where(t => t.Date == transactionDate)
-            // .AsNoTracking()
             .ToListAsync();
 
         var transactionId = transactions

@@ -2,28 +2,22 @@
 using AwesomeGICBank.ApplicationServices.Responses;
 using AwesomeGICBank.Domain.Helpers;
 using AwesomeGICBank.Domain.ValueObjects;
-using AwesomeGICBank.DomainServices.Services.Domain;
 using AwesomeGICBank.DomainServices.Services.Persistence;
 using MediatR;
 
 namespace AwesomeGICBank.ApplicationServices.Features.InterestRules.Commands.Create;
 
 public class CreateInterestRuleCommandCommandHandler
-    : IRequestHandler<CreateInterestRuleCommand, BaseResponse>
+    : IRequestHandler<CreateInterestRuleCommand, BaseResponse<InterestRulesResponse>>
 {
-    private readonly IInterestRuleDomainService _interestRuleDomainService;
     private readonly IUnitOfWork _unitOfWork;
 
-    public CreateInterestRuleCommandCommandHandler(
-        IUnitOfWork unitOfWork,
-        IInterestRuleDomainService interestRuleDomainService)
+    public CreateInterestRuleCommandCommandHandler(IUnitOfWork unitOfWork)
     {
         _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
-
-        _interestRuleDomainService = interestRuleDomainService ?? throw new ArgumentNullException(nameof(interestRuleDomainService));
     }
 
-    public async Task<BaseResponse> Handle(CreateInterestRuleCommand request, CancellationToken cancellationToken)
+    public async Task<BaseResponse<InterestRulesResponse>> Handle(CreateInterestRuleCommand request, CancellationToken cancellationToken)
     {
         var validator = new InterestRuleDtoValidator();
 
@@ -31,22 +25,34 @@ public class CreateInterestRuleCommandCommandHandler
 
         if (validationResult.Errors.Count > 0)
         {
-            return new BaseResponse(validationResult.Errors);
+            return new BaseResponse<InterestRulesResponse>(validationResult.Errors);
         }
 
         var interestRuleDto = request.InterestRule;
         var date = DateTimeHelpers.ConvertDateStringToDateOnly(interestRuleDto.Date);
 
-        var interestRuleSeqNo = await _interestRuleDomainService.GenerateNextRuleSequenceNoAsync(date);
-
         var interestRule = new InterestRule(
             date,
-            interestRuleSeqNo,
-            name: interestRuleDto.Name,
+            ruleId: interestRuleDto.Name,
             rate: NumericHelpers.ConvertToDecimal(interestRuleDto.Rate));
 
-        await _unitOfWork.InterestRuleRepository.CreateAsync(interestRule);
+        await _unitOfWork.InterestRuleRepository.CreateOrUpdateAsync(interestRule);
+        await _unitOfWork.SaveAsync();
+        var rules = await _unitOfWork.InterestRuleRepository.GetAllAsync();
 
-        return new BaseResponse();
+        var interestRulesResponse = new InterestRulesResponse();
+        foreach (var rule in rules)
+        {
+            interestRulesResponse
+                .InterestRuleRecords
+                .Add(new InterestRuleRecord()
+                {
+                    Date = rule.Date,
+                    Rate = rule.Rate,
+                    RuleId = rule.RuleId
+                });
+        }
+
+        return new BaseResponse<InterestRulesResponse>(interestRulesResponse);
     }
 }

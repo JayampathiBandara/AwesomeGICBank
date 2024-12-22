@@ -12,6 +12,7 @@ public class AwesomeGICBankDbContext : DbContext
     }
 
     public DbSet<Account> Accounts { get; set; }
+    public DbSet<InterestRule> InterestRules { get; set; }
     public DbSet<Transaction> Transactions { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -19,6 +20,8 @@ public class AwesomeGICBankDbContext : DbContext
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.ApplyConfiguration(new AccountConfiguration());
+        modelBuilder.ApplyConfiguration(new InterestRuleConfiguration());
         modelBuilder.ApplyConfiguration(new TransactionConfiguration());
+
     }
 }

@@ -46,7 +46,7 @@ public class BankClient
         using (var unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>())
         {
             {
-                return operation switch
+                var bankOpen = operation switch
                 {
                     Operation.InputTransactions => await ProcessTransactionInputAsync(),
                     Operation.DefineInterestRules => await ProcessInterestRuleAsync(),
@@ -54,7 +54,10 @@ public class BankClient
                     Operation.Quit => await ProcessQuitAsync(),
                     _ => await ProcessInvalidOperationAsync()
                 };
+
+                return bankOpen;
             }
+
         }
     }
 
@@ -88,13 +91,13 @@ public class BankClient
             {
                 InterestRule = interestRuleDto
             });
-        Console.WriteLine(response.ToString());
+        Console.WriteLine(response.ReturnValue.ToString());
         return true;
     }
 
     private async Task<bool> ProcessTransactionInputAsync()
     {
-        Console.WriteLine(
+        Console.Write(
             "\nPlease enter transaction details in <Date> <Account> <Type> <Amount> format \n" +
             "(or enter blank to go back to main menu):" +
             "\r\n>");

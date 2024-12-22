@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 
-
 namespace AwesomeGICBank.SqlServerPersistence.Configurations;
 
 public class AwesomeGICBankDbContextFactory : IDesignTimeDbContextFactory<AwesomeGICBankDbContext>
@@ -11,7 +10,7 @@ public class AwesomeGICBankDbContextFactory : IDesignTimeDbContextFactory<Awesom
     {
         var configuration = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.Development.json", optional: false, reloadOnChange: true)
+            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
             .Build();
 
         var optionsBuilder = new DbContextOptionsBuilder<AwesomeGICBankDbContext>();

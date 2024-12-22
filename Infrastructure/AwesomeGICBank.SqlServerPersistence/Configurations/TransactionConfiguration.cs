@@ -32,7 +32,6 @@ public class TransactionConfiguration : IEntityTypeConfiguration<Transaction>
             .IsRequired()
             .HasMaxLength(15);
 
-
         builder.Property(e => e.Type)
         .IsRequired()
         .HasMaxLength(1);
