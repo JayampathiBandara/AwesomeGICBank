@@ -8,9 +8,10 @@ public class UnitOfWork : IUnitOfWork
 {
     private bool _disposed;
     private readonly AwesomeGICBankDbContext _dbContext;
+
     public UnitOfWork(AwesomeGICBankDbContext dbContext)
     {
-        _dbContext = dbContext;
+        _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
     }
 
     private IAccountRepository accountRepository;
@@ -24,6 +25,7 @@ public class UnitOfWork : IUnitOfWork
     public async Task SaveAsync()
     {
         await _dbContext.SaveChangesAsync();
+        _dbContext.ChangeTracker.Clear();
     }
 
     public void Dispose()

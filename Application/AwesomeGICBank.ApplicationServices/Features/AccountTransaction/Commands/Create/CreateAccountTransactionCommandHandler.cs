@@ -39,10 +39,17 @@ public class CreateAccountTransactionCommandHandler
             amount: request.Transaction.Amount,
             transactionDate: request.Transaction.TransactionDate);
 
+        var existingAccount = await _unitOfWork.AccountRepository.GetAsync(request.Transaction.AccountNo);
+        if (existingAccount is null)
+        {
+            account.DoTransaction(transaction);
+            await _unitOfWork.AccountRepository.CreateAsync(account);
+        }
+        else
+        {
+            existingAccount.DoTransaction(transaction);
+        }
 
-        await _unitOfWork.AccountRepository.CreateAsync(account);
-
-        await _unitOfWork.TransactionRepository.CreateAsync(account.AccountNo, transaction);
         await _unitOfWork.SaveAsync();
         return new BaseResponse();
     }

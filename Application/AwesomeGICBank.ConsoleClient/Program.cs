@@ -1,7 +1,6 @@
 ﻿using AwesomeGICBank.ApplicationServices;
 using AwesomeGICBank.DomainServices;
 using AwesomeGICBank.SqlServerPersistence;
-using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -12,9 +11,9 @@ public class Program
     static async Task Main(string[] args)
     {
         var serviceProvider = ConfigureServices();
-        var mediator = serviceProvider.GetRequiredService<IMediator>();
 
-        var bankClient = new BankClient(mediator, serviceProvider);
+        var bankClient = new BankClient(serviceProvider);
+
         await bankClient.StartBankAsync();
     }
 

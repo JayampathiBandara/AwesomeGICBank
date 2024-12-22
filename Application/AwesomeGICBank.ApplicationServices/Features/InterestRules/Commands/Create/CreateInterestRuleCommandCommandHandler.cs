@@ -8,7 +8,7 @@ using MediatR;
 namespace AwesomeGICBank.ApplicationServices.Features.InterestRules.Commands.Create;
 
 public class CreateInterestRuleCommandCommandHandler
-    : IRequestHandler<CreateInterestRuleCommand, BaseResponse<InterestRulesResponse>>
+    : IRequestHandler<CreateInterestRuleCommand, BaseResponse>
 {
     private readonly IUnitOfWork _unitOfWork;
 
@@ -17,7 +17,7 @@ public class CreateInterestRuleCommandCommandHandler
         _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
     }
 
-    public async Task<BaseResponse<InterestRulesResponse>> Handle(CreateInterestRuleCommand request, CancellationToken cancellationToken)
+    public async Task<BaseResponse> Handle(CreateInterestRuleCommand request, CancellationToken cancellationToken)
     {
         var validator = new InterestRuleDtoValidator();
 
@@ -25,7 +25,7 @@ public class CreateInterestRuleCommandCommandHandler
 
         if (validationResult.Errors.Count > 0)
         {
-            return new BaseResponse<InterestRulesResponse>(validationResult.Errors);
+            return new BaseResponse(validationResult.Errors);
         }
 
         var interestRuleDto = request.InterestRule;
@@ -38,21 +38,7 @@ public class CreateInterestRuleCommandCommandHandler
 
         await _unitOfWork.InterestRuleRepository.CreateOrUpdateAsync(interestRule);
         await _unitOfWork.SaveAsync();
-        var rules = await _unitOfWork.InterestRuleRepository.GetAllAsync();
 
-        var interestRulesResponse = new InterestRulesResponse();
-        foreach (var rule in rules)
-        {
-            interestRulesResponse
-                .InterestRuleRecords
-                .Add(new InterestRuleRecord()
-                {
-                    Date = rule.Date,
-                    Rate = rule.Rate,
-                    RuleId = rule.RuleId
-                });
-        }
-
-        return new BaseResponse<InterestRulesResponse>(interestRulesResponse);
+        return new BaseResponse();
     }
 }

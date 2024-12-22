@@ -1,7 +1,9 @@
-﻿using AwesomeGICBank.ApplicationServices.Common.Parsers;
+﻿using AwesomeGICBank.ApplicationServices.Common.Enums;
+using AwesomeGICBank.ApplicationServices.Common.Parsers;
 using AwesomeGICBank.ApplicationServices.Features.AccountStatement.Queries;
 using AwesomeGICBank.ApplicationServices.Features.AccountTransaction.Commands.Create;
 using AwesomeGICBank.ApplicationServices.Features.InterestRules.Commands.Create;
+using AwesomeGICBank.ApplicationServices.Features.InterestRules.Queries;
 using AwesomeGICBank.ApplicationServices.Responses;
 using AwesomeGICBank.ConsoleClient.Enums;
 using AwesomeGICBank.ConsoleClient.Helpers;
@@ -13,12 +15,10 @@ namespace AwesomeGICBank.ConsoleClient;
 
 public class BankClient
 {
-    private readonly IMediator _mediator;
     private readonly IServiceProvider _serviceProvider;
 
-    public BankClient(IMediator mediator, IServiceProvider serviceProvider)
+    public BankClient(IServiceProvider serviceProvider)
     {
-        _mediator = mediator;
         _serviceProvider = serviceProvider;
     }
 
@@ -42,60 +42,23 @@ public class BankClient
 
     public async Task<bool> ExecuteOperationAsync(Operation operation)
     {
-        using (var scope = _serviceProvider.CreateScope())
-        using (var unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>())
+        using var scope = _serviceProvider.CreateAsyncScope();
+        using var unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
+        var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
+
+        bool bankOpen = operation switch
         {
-            {
-                var bankOpen = operation switch
-                {
-                    Operation.InputTransactions => await ProcessTransactionInputAsync(),
-                    Operation.DefineInterestRules => await ProcessInterestRuleAsync(),
-                    Operation.PrintStatement => await ProcessPrintStatementAsync(),
-                    Operation.Quit => await ProcessQuitAsync(),
-                    _ => await ProcessInvalidOperationAsync()
-                };
+            Operation.InputTransactions => await ProcessTransactionInputAsync(mediator),
+            Operation.DefineInterestRules => await ProcessInterestRuleAsync(mediator),
+            Operation.PrintStatement => await ProcessPrintStatementAsync(mediator),
+            Operation.Quit => ProcessQuit(),
+            _ => ProcessInvalidOperation()
+        };
 
-                return bankOpen;
-            }
+        return bankOpen;
 
-        }
     }
-
-    private async Task<bool> ProcessPrintStatementAsync()
-    {
-        Console.Write("Please enter account and month to generate the statement <Account> <Year><Month>\r\n(or enter blank to go back to main menu):\r\n>");
-        var input = Console.ReadLine();
-        if (string.IsNullOrEmpty(input))
-            return true;
-        BaseResponse<GeneralAccountStatementResponse> response1 = (await _mediator.Send(
-            new GetAccountStatementQuery()
-            {
-                AccountNo = input
-            }));
-        Console.WriteLine(response1.ReturnValue.ToString());
-        return true;
-    }
-
-    private async Task<bool> ProcessInterestRuleAsync()
-    {
-        Console.Write("\nPlease enter interest rules details in <Date> <RuleId> <Rate in %> format " +
-            "\r\n(or enter blank to go back to main menu):" +
-            "\r\n>");
-        var input = Console.ReadLine();
-        if (string.IsNullOrEmpty(input))
-            return true;
-
-        var interestRuleDto = InterestRuleDtoParser.Parse(input);
-        var response = await _mediator.Send(
-            new CreateInterestRuleCommand()
-            {
-                InterestRule = interestRuleDto
-            });
-        Console.WriteLine(response.ReturnValue.ToString());
-        return true;
-    }
-
-    private async Task<bool> ProcessTransactionInputAsync()
+    private async Task<bool> ProcessTransactionInputAsync(IMediator mediator)
     {
         Console.Write(
             "\nPlease enter transaction details in <Date> <Account> <Type> <Amount> format \n" +
@@ -107,22 +70,78 @@ public class BankClient
             return true;
 
         var transactionDto = TransactionDtoParser.Parse(input);
-        var response = await _mediator.Send(
+        var response = await mediator.Send(
             new CreateAccountTransactionCommand
             {
                 Transaction = transactionDto
             });
-        Console.WriteLine(response.ToString());
+        if (response.ResponseType != ResponseTypes.Success)
+        {
+            Console.WriteLine(response.ToString());
+            return true;
+        }
+
+        BaseResponse<GeneralAccountStatementResponse> result = await mediator.Send(
+            new GetAccountStatementQuery()
+            {
+                AccountNo = transactionDto.AccountNo
+            });
+        Console.WriteLine(result.ReturnValue.ToString());
         return true;
     }
 
-    private async Task<bool> ProcessQuitAsync()
+    private async Task<bool> ProcessPrintStatementAsync(IMediator mediator)
+    {
+        Console.Write("Please enter account and month to generate the statement <Account> <Year><Month>\r\n(or enter blank to go back to main menu):\r\n>");
+        var input = Console.ReadLine();
+        if (string.IsNullOrEmpty(input))
+            return true;
+        BaseResponse<GeneralAccountStatementResponse> response1 = (await mediator.Send(
+            new GetAccountStatementQuery()
+            {
+                AccountNo = input
+            }));
+        Console.WriteLine(response1.ReturnValue.ToString());
+        return true;
+    }
+
+    private async Task<bool> ProcessInterestRuleAsync(IMediator mediator)
+    {
+        Console.Write("\nPlease enter interest rules details in <Date> <RuleId> <Rate in %> format " +
+            "\r\n(or enter blank to go back to main menu):" +
+            "\r\n>");
+        var input = Console.ReadLine();
+        if (string.IsNullOrEmpty(input))
+            return true;
+
+        var interestRuleDto = InterestRuleDtoParser.Parse(input);
+        var response = await mediator.Send(
+            new CreateInterestRuleCommand()
+            {
+                InterestRule = interestRuleDto
+            });
+        if (response.ResponseType != ResponseTypes.Success)
+        {
+            Console.WriteLine(response.ToString());
+            return true;
+        }
+
+        BaseResponse<InterestRulesResponse>
+            result = await mediator.Send(new GetInterestRulesQuery() { });
+        Console.WriteLine(result.ReturnValue.ToString());
+
+        return true;
+    }
+
+
+
+    private static bool ProcessQuit()
     {
         Console.WriteLine("\nThank you for banking with AwesomeGIC Bank." +
             "\r\nHave a nice day!");
         return false;
     }
-    private static async Task<bool> ProcessInvalidOperationAsync()
+    private static bool ProcessInvalidOperation()
     {
         Console.WriteLine("\nInvalid Operation. Please Select Correct Operation.\n");
         return true;

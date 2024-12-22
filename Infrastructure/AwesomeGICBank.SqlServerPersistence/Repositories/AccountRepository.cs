@@ -11,13 +11,9 @@ public class AccountRepository : BaseRepository, IAccountRepository
     {
     }
 
-    public async Task<Account> CreateAsync(Account account)
+    public async Task CreateAsync(Account account)
     {
-        if (!_dbContext.Accounts.Any(x => x.AccountNo == account.AccountNo))
-        {
-            await _dbContext.Set<Account>().AddAsync(account);
-        }
-        return account;
+        await _dbContext.Set<Account>().AddAsync(account);
     }
 
     public async Task<Account> GetAsync(string accountNo)

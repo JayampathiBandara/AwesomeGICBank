@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace AwesomeGICBank.ApplicationServices.Features.InterestRules.Commands.Create;
+namespace AwesomeGICBank.ApplicationServices.Features.InterestRules.Queries;
 
 public class InterestRulesResponse
 {

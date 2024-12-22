@@ -4,7 +4,7 @@ using MediatR;
 
 namespace AwesomeGICBank.ApplicationServices.Features.InterestRules.Commands.Create;
 
-public class CreateInterestRuleCommand : IRequest<BaseResponse<InterestRulesResponse>>
+public class CreateInterestRuleCommand : IRequest<BaseResponse>
 {
     public InterestRuleDto InterestRule { get; set; }
 }
