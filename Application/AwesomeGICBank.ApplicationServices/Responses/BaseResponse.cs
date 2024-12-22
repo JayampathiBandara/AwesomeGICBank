@@ -40,7 +40,7 @@ public class BaseResponse
 
     public override string ToString()
     {
-        return $"{ResponseType} \n {string.Join("\n", Messages)}";
+        return $"\n{ResponseType}: \n {string.Join("\n ", Messages)}\n";
 
     }
 }
@@ -56,4 +56,16 @@ public class BaseResponse<T> : BaseResponse where T : class?
     public BaseResponse(ResponseTypes responseType, string message) : base(responseType, message) { }
 
     public BaseResponse(List<ValidationFailure> validationResult) : base(validationResult) { }
+
+    public void PrintResponse()
+    {
+        if (ResponseType == ResponseTypes.Success)
+        {
+            Console.WriteLine(ReturnValue.ToString());
+        }
+        else
+        {
+            Console.WriteLine(this.ToString());
+        }
+    }
 }

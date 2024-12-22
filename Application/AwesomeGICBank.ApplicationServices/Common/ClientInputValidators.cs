@@ -19,8 +19,16 @@ public static class ClientInputValidators
         string format = "yyyyMMdd";
         CultureInfo provider = CultureInfo.InvariantCulture;
 
-        return DateOnly.TryParseExact(date, format, provider, DateTimeStyles.None, out DateOnly result);
+        return DateOnly.TryParseExact(date, format, provider, DateTimeStyles.None, out _);
 
+    }
+
+    public static bool IsYearMonthOnly(string yearMonth)
+    {
+        string format = "yyyyMM";
+        CultureInfo provider = CultureInfo.InvariantCulture;
+
+        return DateOnly.TryParseExact(yearMonth, format, provider, DateTimeStyles.None, out _);
     }
 }
 

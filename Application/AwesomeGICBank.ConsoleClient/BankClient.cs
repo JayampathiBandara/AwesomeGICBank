@@ -1,6 +1,7 @@
 ﻿using AwesomeGICBank.ApplicationServices.Common.Enums;
 using AwesomeGICBank.ApplicationServices.Common.Parsers;
 using AwesomeGICBank.ApplicationServices.Features.AccountStatement.Queries;
+using AwesomeGICBank.ApplicationServices.Features.AccountStatement.Queries.Monthly;
 using AwesomeGICBank.ApplicationServices.Features.AccountTransaction.Commands.Create;
 using AwesomeGICBank.ApplicationServices.Features.InterestRules.Commands.Create;
 using AwesomeGICBank.ApplicationServices.Features.InterestRules.Queries;
@@ -86,22 +87,28 @@ public class BankClient
             {
                 AccountNo = transactionDto.AccountNo
             });
-        Console.WriteLine(result.ReturnValue.ToString());
+
+        result.PrintResponse();
         return true;
     }
 
     private async Task<bool> ProcessPrintStatementAsync(IMediator mediator)
     {
-        Console.Write("Please enter account and month to generate the statement <Account> <Year><Month>\r\n(or enter blank to go back to main menu):\r\n>");
+        Console.Write(
+            "Please enter account and month to generate the statement <Account> <Year><Month>" +
+            "\r\n(or enter blank to go back to main menu):\r\n>");
         var input = Console.ReadLine();
         if (string.IsNullOrEmpty(input))
             return true;
-        BaseResponse<GeneralAccountStatementResponse> response1 = (await mediator.Send(
-            new GetAccountStatementQuery()
+
+        var statementQuery = StatementQueryDtoParser.Parse(input);
+
+        BaseResponse<MonthlyAccountStatementResponse> response = await mediator.Send(
+            new GetMonthlyAccountStatementQuery()
             {
-                AccountNo = input
-            }));
-        Console.WriteLine(response1.ReturnValue.ToString());
+                StatementQuery = new() { AccountNo = statementQuery.AccountNo, YearMonth = statementQuery.YearMonth }
+            });
+        response.PrintResponse();
         return true;
     }
 
@@ -128,12 +135,11 @@ public class BankClient
 
         BaseResponse<InterestRulesResponse>
             result = await mediator.Send(new GetInterestRulesQuery() { });
-        Console.WriteLine(result.ReturnValue.ToString());
+
+        result.PrintResponse();
 
         return true;
     }
-
-
 
     private static bool ProcessQuit()
     {

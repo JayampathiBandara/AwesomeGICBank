@@ -2,7 +2,6 @@
 using System.Text;
 
 namespace AwesomeGICBank.ApplicationServices.Features.AccountStatement.Queries;
-
 public class GeneralAccountStatementResponse
 {
     public string AccountNo { get; set; }
@@ -16,7 +15,6 @@ public class GeneralAccountStatementResponse
         statement.AppendLine();
 
         statement.AppendLine("| Date     | Txn Id      | Type | Amount  |");
-        statement.AppendLine("|----------|-------------|------|---------|");
 
         foreach (var record in AccountStatementRecords)
         {
