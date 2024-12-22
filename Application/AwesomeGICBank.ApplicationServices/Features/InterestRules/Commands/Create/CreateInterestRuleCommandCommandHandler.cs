@@ -12,13 +12,14 @@ public class CreateInterestRuleCommandCommandHandler
     : IRequestHandler<CreateInterestRuleCommand, BaseResponse>
 {
     private readonly IInterestRuleDomainService _interestRuleDomainService;
-    private readonly IInterestRuleRepository _interestRuleRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
     public CreateInterestRuleCommandCommandHandler(
-        IInterestRuleRepository interestRuleRepository,
+        IUnitOfWork unitOfWork,
         IInterestRuleDomainService interestRuleDomainService)
     {
-        _interestRuleRepository = interestRuleRepository ?? throw new ArgumentNullException(nameof(interestRuleRepository));
+        _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+
         _interestRuleDomainService = interestRuleDomainService ?? throw new ArgumentNullException(nameof(interestRuleDomainService));
     }
 
@@ -44,7 +45,7 @@ public class CreateInterestRuleCommandCommandHandler
             name: interestRuleDto.Name,
             rate: NumericHelpers.ConvertToDecimal(interestRuleDto.Rate));
 
-        await _interestRuleRepository.CreateAsync(interestRule);
+        await _unitOfWork.InterestRuleRepository.CreateAsync(interestRule);
 
         return new BaseResponse();
     }

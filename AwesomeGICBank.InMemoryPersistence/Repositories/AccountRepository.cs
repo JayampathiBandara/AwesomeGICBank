@@ -10,12 +10,12 @@ public class AccountRepository : BaseRepository, IAccountRepository
 
     }
 
-    public Task CreateAsync(Account account)
+    public async Task<Account> CreateAsync(Account account)
     {
         if (!_bank.Accounts.Any(x => x.AccountNo.Equals(account.AccountNo)))
             _bank.Accounts.Add(account);
 
-        return Task.CompletedTask;
+        return account;
     }
 
     public async Task<Account> GetAsync(string accountNo)
@@ -33,4 +33,6 @@ public class AccountRepository : BaseRepository, IAccountRepository
 
         return account;
     }
+
+
 }

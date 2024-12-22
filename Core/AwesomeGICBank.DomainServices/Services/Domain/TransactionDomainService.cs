@@ -7,15 +7,15 @@ namespace AwesomeGICBank.DomainServices.Services.Domain;
 
 public class TransactionDomainService : ITransactionDomainService
 {
-    private readonly ITransactionRepository _transactionRepository;
-    public TransactionDomainService(ITransactionRepository transactionRepository)
+    private readonly IUnitOfWork _unitOfWork;
+    public TransactionDomainService(IUnitOfWork unitOfWork)
     {
-        _transactionRepository = transactionRepository ?? throw new ArgumentNullException(nameof(transactionRepository));
+        _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
     }
 
     public async Task<TransactionId> GenerateNextTransactionId(DateOnly date)
     {
-        var latestNumber = await _transactionRepository.GetMaximumTransactionIdAsync(date);
+        var latestNumber = await _unitOfWork.TransactionRepository.GetMaximumTransactionIdAsync(date);
 
         var nextNumber = (latestNumber is null) ? 1 : uint.Parse(latestNumber.Split("-")[1]) + 1;
 

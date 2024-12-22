@@ -1,4 +1,5 @@
 ﻿using AwesomeGICBank.Domain.DataTypes;
+using AwesomeGICBank.Domain.Entities;
 using AwesomeGICBank.Domain.Exceptions;
 
 namespace AwesomeGICBank.Domain.ValueObjects;
@@ -10,6 +11,11 @@ public class Transaction
     public TransactionType Type { get; set; }
     public decimal Amount { get; set; }
 
+    public Account Account { get; set; }
+    public string AccountNo { get; set; }
+
+    public string TransactionId => Id.Value;
+    protected Transaction() { }
     public Transaction(TransactionId id, TransactionType transactionType, decimal amount, DateOnly transactionDate)
     {
         if (id is null)

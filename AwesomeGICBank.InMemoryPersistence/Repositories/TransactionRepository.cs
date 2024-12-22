@@ -1,4 +1,5 @@
-﻿using AwesomeGICBank.Domain.ValueObjects;
+﻿using AwesomeGICBank.Domain.Entities;
+using AwesomeGICBank.Domain.ValueObjects;
 using AwesomeGICBank.DomainServices.Services.Persistence;
 
 namespace AwesomeGICBank.InMemoryPersistence.Repositories;
@@ -9,7 +10,12 @@ public class TransactionRepository : BaseRepository, ITransactionRepository
     {
 
     }
+    public async Task CreateAsync(Account account, Transaction transaction)
+    {
+        if (account is not null)
+            account.DoTransaction(transaction);
 
+    }
     public async Task CreateAsync(string accountNo, Transaction transaction)
     {
         var account = _bank.Accounts.Where(x => x.AccountNo == accountNo).FirstOrDefault();

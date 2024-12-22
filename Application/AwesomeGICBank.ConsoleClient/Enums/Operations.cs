@@ -3,6 +3,6 @@ public enum Operation
 {
     InputTransactions = 'T',
     DefineInterestRules = 'I',
-    PrintStaqtement = 'P',
+    PrintStatement = 'P',
     Quit = 'Q'
 }

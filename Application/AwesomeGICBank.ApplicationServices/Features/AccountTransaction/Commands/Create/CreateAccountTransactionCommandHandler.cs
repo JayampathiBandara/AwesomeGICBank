@@ -1,9 +1,6 @@
 ﻿using AwesomeGICBank.ApplicationServices.Common.DTOs;
 using AwesomeGICBank.ApplicationServices.Responses;
-using AwesomeGICBank.Domain.DataTypes;
 using AwesomeGICBank.Domain.Entities;
-using AwesomeGICBank.Domain.Helpers;
-using AwesomeGICBank.Domain.ValueObjects;
 using AwesomeGICBank.DomainServices.Services.Domain;
 using AwesomeGICBank.DomainServices.Services.Persistence;
 using MediatR;
@@ -13,14 +10,15 @@ namespace AwesomeGICBank.ApplicationServices.Features.AccountTransaction.Command
 public class CreateAccountTransactionCommandHandler
     : IRequestHandler<CreateAccountTransactionCommand, BaseResponse>
 {
-    private readonly IAccountRepository _accountRepository;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly ITransactionDomainService _transactionDomainService;
 
+
     public CreateAccountTransactionCommandHandler(
-        IAccountRepository accountRepository,
+        IUnitOfWork unitOfWork,
         ITransactionDomainService transactionDomainService)
     {
-        _accountRepository = accountRepository ?? throw new ArgumentNullException(nameof(accountRepository));
+        _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
         _transactionDomainService = transactionDomainService ?? throw new ArgumentNullException(nameof(transactionDomainService));
     }
 
@@ -35,22 +33,17 @@ public class CreateAccountTransactionCommandHandler
             return new BaseResponse(validationResult.Errors);
         }
 
-        var transactionDto = request.Transaction;
-
-        var transactionDate = DateTimeHelpers.ConvertDateStringToDateOnly(transactionDto.TransactionDate);
         var account = new Account(request.Transaction.AccountNo);
-        var transactionId = _transactionDomainService.GenerateNextTransactionId(transactionDate);
+        var transaction = await _transactionDomainService.CreateTransactionAsync(
+            transactionType: request.Transaction.TransactionType,
+            amount: request.Transaction.Amount,
+            transactionDate: request.Transaction.TransactionDate);
 
-        var transaction = new Transaction(
-            transactionId,
-            transactionType: EnumHelpers.ConvertToEnum<TransactionType>(transactionDto.TransactionType[0]),
-            amount: AmountHelpers.ConvertToAmount(transactionDto.Amount),
-            transactionDate: transactionDate);
 
-        account.DoTransaction(transaction);
+        await _unitOfWork.AccountRepository.CreateAsync(account);
 
-        await _accountRepository.CreateAsync(account);
-
+        await _unitOfWork.TransactionRepository.CreateAsync(account.AccountNo, transaction);
+        await _unitOfWork.SaveAsync();
         return new BaseResponse();
     }
 }

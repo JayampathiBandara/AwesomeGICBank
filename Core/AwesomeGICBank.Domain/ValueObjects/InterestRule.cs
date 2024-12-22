@@ -9,6 +9,8 @@ public class InterestRule
     public int SequenceNumber { get; set; }
     public decimal Rate { get; set; }
 
+    protected InterestRule() { }
+
     public InterestRule(DateOnly date, int sequenceNumber, string name, decimal rate)
     {
         if (string.IsNullOrEmpty(name))

@@ -1,10 +1,16 @@
 ﻿using AwesomeGICBank.Domain.ValueObjects;
 using AwesomeGICBank.DomainServices.Services.Persistence;
+using AwesomeGICBank.SqlServerPersistence.Configurations;
 
 namespace AwesomeGICBank.SqlServerPersistence.Repositories;
 
-public class InterestRuleRepository : IInterestRuleRepository
+public class InterestRuleRepository :
+  BaseRepository, IInterestRuleRepository
 {
+    public InterestRuleRepository(AwesomeGICBankDbContext dbContext) : base(dbContext)
+    {
+    }
+
     public Task CreateAsync(InterestRule interestRule)
     {
         return Task.CompletedTask;

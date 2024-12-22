@@ -4,17 +4,16 @@ namespace AwesomeGICBank.DomainServices.Services.Domain;
 
 public class InterestRuleDomainService : IInterestRuleDomainService
 {
-    private readonly IInterestRuleRepository _interestRuleRepository;
-
-
-    public InterestRuleDomainService(IInterestRuleRepository interestRuleRepository)
+    private readonly IUnitOfWork _unitOfWork;
+    public InterestRuleDomainService(IUnitOfWork unitOfWork)
     {
-        _interestRuleRepository = interestRuleRepository ?? throw new ArgumentNullException(nameof(interestRuleRepository));
+        _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
     }
+
 
     public async Task<int> GenerateNextRuleSequenceNoAsync(DateOnly date)
     {
-        var latestNumber = await _interestRuleRepository.GetMaximumSequenceNoAsync(date);
+        var latestNumber = await _unitOfWork.InterestRuleRepository.GetMaximumSequenceNoAsync(date);
 
         return ++latestNumber;
     }

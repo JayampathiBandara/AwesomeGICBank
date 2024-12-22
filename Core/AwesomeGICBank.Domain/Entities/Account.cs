@@ -8,7 +8,7 @@ public class Account
 {
     private readonly List<Transaction> _transactions;
 
-    public string AccountNo { get; private set; }
+    public string AccountNo { get; init; }
 
     public IReadOnlyList<Transaction> Transactions
     {
@@ -24,6 +24,8 @@ public class Account
                 return -1 * x.Amount;
             else return 0;
         });
+
+    protected Account() { }
 
     public Account(string accountNo)
     {
