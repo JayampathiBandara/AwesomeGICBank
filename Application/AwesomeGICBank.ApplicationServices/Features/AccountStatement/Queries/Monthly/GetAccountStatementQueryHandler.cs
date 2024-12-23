@@ -1,6 +1,8 @@
-﻿using AwesomeGICBank.ApplicationServices.Common.DTOs;
+﻿using AutoMapper;
+using AwesomeGICBank.ApplicationServices.Common.DTOs;
 using AwesomeGICBank.ApplicationServices.Common.Enums;
 using AwesomeGICBank.ApplicationServices.Responses;
+using AwesomeGICBank.DomainServices.Services.Domain.Interfaces;
 using AwesomeGICBank.DomainServices.Services.Persistence;
 using MediatR;
 
@@ -9,12 +11,20 @@ namespace AwesomeGICBank.ApplicationServices.Features.AccountStatement.Queries.M
 public class GetMonthlyAccountStatementQueryHandler :
     IRequestHandler<GetMonthlyAccountStatementQuery, BaseResponse<MonthlyAccountStatementResponse>>
 {
+    private readonly IMapper _mapper;
     private readonly IUnitOfWork _unitOfWork;
-
-    public GetMonthlyAccountStatementQueryHandler(IUnitOfWork unitOfWork)
+    private readonly IBankStatementDomainService _bankStatementDomainService;
+    public GetMonthlyAccountStatementQueryHandler(
+        IMapper mapper,
+        IUnitOfWork unitOfWork,
+        IBankStatementDomainService bankStatementDomainService)
     {
+        _mapper = mapper ??
+            throw new ArgumentNullException(nameof(mapper));
         _unitOfWork = unitOfWork ??
             throw new ArgumentNullException(nameof(unitOfWork));
+        _bankStatementDomainService = bankStatementDomainService ??
+            throw new ArgumentNullException(nameof(bankStatementDomainService));
     }
 
     public async Task<BaseResponse<MonthlyAccountStatementResponse>> Handle(
@@ -30,32 +40,15 @@ public class GetMonthlyAccountStatementQueryHandler :
             return new BaseResponse<MonthlyAccountStatementResponse>(validationResult.Errors);
         }
 
-        var account = await _unitOfWork
-            .AccountRepository
-            .GetAsync(request.StatementQuery.AccountNo, request.StatementQuery.Year, request.StatementQuery.Month);
-
-        if (account == null)
+        if (!await _unitOfWork.AccountRepository.ExistsAsync(request.StatementQuery.AccountNo))
         {
             return new BaseResponse<MonthlyAccountStatementResponse>(ResponseTypes.ClientError, "Account not found");
         }
 
-        var response = new MonthlyAccountStatementResponse
-        {
-            AccountNo = account.AccountNo,
-        };
+        var statement = await _bankStatementDomainService
+            .GenerateStatementAsync(request.StatementQuery.AccountNo, request.StatementQuery.Year, request.StatementQuery.Month);
 
-        foreach (var transaction in account.Transactions.OrderBy(x => x.TransactionId))
-        {
-            response
-                .MonthlyAccountStatementRecords
-                .Add(new MonthlyAccountStatementRecord
-                {
-                    Date = transaction.Date,
-                    TransactionId = transaction.Id.Value,
-                    Type = transaction.Type,
-                    Amount = transaction.Amount
-                });
-        }
+        var response = _mapper.Map<MonthlyAccountStatementResponse>(statement);
 
         return new BaseResponse<MonthlyAccountStatementResponse>(response);
     }

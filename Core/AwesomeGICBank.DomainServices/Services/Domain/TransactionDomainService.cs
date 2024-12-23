@@ -1,6 +1,7 @@
 ﻿using AwesomeGICBank.Domain.DataTypes;
 using AwesomeGICBank.Domain.Helpers;
 using AwesomeGICBank.Domain.ValueObjects;
+using AwesomeGICBank.DomainServices.Services.Domain.Interfaces;
 using AwesomeGICBank.DomainServices.Services.Persistence;
 
 namespace AwesomeGICBank.DomainServices.Services.Domain;

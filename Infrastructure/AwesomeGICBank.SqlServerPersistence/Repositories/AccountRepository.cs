@@ -26,13 +26,11 @@ public class AccountRepository : BaseRepository, IAccountRepository
         return account;
     }
 
-    public async Task<Account> GetAsync(string accountNo, int year, int month)
+    public async Task<bool> ExistsAsync(string accountNo)
     {
         var account = await _dbContext
             .Set<Account>()
-            .Include(x => x.Transactions
-                .Where(x => x.Date.Year == year && x.Date.Month == month))
-            .FirstOrDefaultAsync(x => x.AccountNo == accountNo);
+            .AnyAsync(x => x.AccountNo == accountNo);
 
         return account;
     }

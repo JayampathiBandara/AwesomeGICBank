@@ -1,4 +1,4 @@
-﻿namespace AwesomeGICBank.DomainServices.Services.Domain;
+﻿namespace AwesomeGICBank.DomainServices.Services.Domain.Interfaces;
 
 public interface IInterestRuleDomainService
 {

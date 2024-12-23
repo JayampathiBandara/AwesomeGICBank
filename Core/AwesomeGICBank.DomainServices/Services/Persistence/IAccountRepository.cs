@@ -6,5 +6,5 @@ public interface IAccountRepository
 {
     public Task CreateAsync(Account account);
     public Task<Account> GetAsync(string accountNo);
-    public Task<Account> GetAsync(string accountNo, int year, int month);
+    public Task<bool> ExistsAsync(string accountNo);
 }

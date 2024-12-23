@@ -3,13 +3,21 @@ using AwesomeGICBank.Domain.Entities;
 using AwesomeGICBank.Domain.Exceptions;
 
 namespace AwesomeGICBank.Domain.ValueObjects;
-
 public class Transaction
 {
     public TransactionId Id { get; set; }
     public DateOnly Date { get; set; }
     public TransactionType Type { get; set; }
     public decimal Amount { get; set; }
+
+    public decimal SignedAmount =>
+        Type switch
+        {
+            TransactionType.Deposit or TransactionType.Interest => Amount,
+            TransactionType.Withdrawal => -Amount,
+            _ => throw new NotImplementedException($"Undefined TransactionType: {Type}")
+        };
+
 
     public Account Account { get; set; }
     public string AccountNo { get; set; }
@@ -29,4 +37,7 @@ public class Transaction
         Amount = amount;
         Date = transactionDate;
     }
+
+    /*public static decimal GetSignedAmount = (Transaction transaction) =>
+         transaction.Type == TransactionType.Withdrawal ? -transaction.Amount : transaction.Amount;*/
 }

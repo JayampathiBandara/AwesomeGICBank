@@ -1,6 +1,6 @@
 ﻿using AwesomeGICBank.Domain.ValueObjects;
 
-namespace AwesomeGICBank.DomainServices.Services.Domain;
+namespace AwesomeGICBank.DomainServices.Services.Domain.Interfaces;
 
 public interface ITransactionDomainService
 {

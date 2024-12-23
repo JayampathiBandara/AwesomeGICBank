@@ -1,7 +1,7 @@
 ﻿using AwesomeGICBank.ApplicationServices.Common.DTOs;
 using AwesomeGICBank.ApplicationServices.Responses;
 using AwesomeGICBank.Domain.Entities;
-using AwesomeGICBank.DomainServices.Services.Domain;
+using AwesomeGICBank.DomainServices.Services.Domain.Interfaces;
 using AwesomeGICBank.DomainServices.Services.Persistence;
 using MediatR;
 

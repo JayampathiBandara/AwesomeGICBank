@@ -15,15 +15,7 @@ public class Account
         get { return _transactions; }
     }
 
-    public decimal Balance => _transactions
-        .Sum(x =>
-        {
-            if (x.Type == TransactionType.Deposit)
-                return x.Amount;
-            else if (x.Type == TransactionType.Withdrawal)
-                return -1 * x.Amount;
-            else return 0;
-        });
+    public decimal Balance => _transactions.Sum(x => x.SignedAmount);
 
     protected Account() { }
 

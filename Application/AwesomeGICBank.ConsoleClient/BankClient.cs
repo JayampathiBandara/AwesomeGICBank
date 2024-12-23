@@ -36,7 +36,7 @@ public class BankClient
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Console.WriteLine($"\n\n{ex.Message}\n\n");
             }
         }
     }
@@ -143,13 +143,13 @@ public class BankClient
 
     private static bool ProcessQuit()
     {
-        Console.WriteLine("\nThank you for banking with AwesomeGIC Bank." +
-            "\r\nHave a nice day!");
+        Console.WriteLine("\n\nThank you for banking with AwesomeGIC Bank." +
+            "\r\nHave a nice day!\n\n");
         return false;
     }
     private static bool ProcessInvalidOperation()
     {
-        Console.WriteLine("\nInvalid Operation. Please Select Correct Operation.\n");
+        Console.WriteLine("\n\nInvalid Operation. Please Select Correct Operation.\n\n");
         return true;
     }
 

@@ -3,5 +3,6 @@
 public enum TransactionType
 {
     Deposit = 'D',
-    Withdrawal = 'W'
+    Withdrawal = 'W',
+    Interest = 'I'
 }
