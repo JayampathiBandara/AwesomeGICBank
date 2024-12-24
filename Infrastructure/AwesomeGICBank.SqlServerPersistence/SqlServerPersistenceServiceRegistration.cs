@@ -1,5 +1,6 @@
 ﻿using AwesomeGICBank.DomainServices.Services.Persistence;
 using AwesomeGICBank.SqlServerPersistence.Configurations;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,7 +13,13 @@ public static class SqlServerPersistenceServiceRegistration
     {
         services.AddDbContext<AwesomeGICBankDbContext>(options =>
         {
-            options.UseSqlServer(configuration["ConnectionStrings:GicBankConnection"]);
+            var connectionString = configuration["ConnectionStrings:GicBankConnection"];
+            var builder = new SqlConnectionStringBuilder(connectionString)
+            {
+                MultipleActiveResultSets = true
+            };
+
+            options.UseSqlServer(builder.ConnectionString);
         });
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 

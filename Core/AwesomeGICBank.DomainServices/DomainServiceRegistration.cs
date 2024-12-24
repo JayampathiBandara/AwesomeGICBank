@@ -14,8 +14,6 @@ public static class DomainServiceRegistration
         services.AddScoped<ITransactionDomainService, TransactionDomainService>();
         services.AddScoped<IInterestCalculatorDomainService, InterestCalculatorDomainService>();
 
-        services.AddScoped<IInterestRuleDomainService, InterestRuleDomainService>();
-
         return services;
     }
 }

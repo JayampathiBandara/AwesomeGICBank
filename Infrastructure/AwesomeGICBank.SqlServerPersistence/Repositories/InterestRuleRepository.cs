@@ -6,7 +6,8 @@ using Microsoft.EntityFrameworkCore;
 namespace AwesomeGICBank.SqlServerPersistence.Repositories;
 
 public class InterestRuleRepository :
-  BaseRepository, IInterestRuleRepository
+    BaseRepository,
+    IInterestRuleRepository
 {
     public InterestRuleRepository(AwesomeGICBankDbContext dbContext) : base(dbContext)
     {
@@ -25,7 +26,6 @@ public class InterestRuleRepository :
         else
         {
             rule.Rate = interestRule.Rate;
-            rule.RuleId = interestRule.RuleId;
         }
     }
 
@@ -34,10 +34,5 @@ public class InterestRuleRepository :
         return await _dbContext
             .Set<InterestRule>()
             .ToListAsync();
-    }
-
-    public Task<int> GetMaximumSequenceNoAsync(DateOnly transactionDate)
-    {
-        return Task.FromResult(2);
     }
 }

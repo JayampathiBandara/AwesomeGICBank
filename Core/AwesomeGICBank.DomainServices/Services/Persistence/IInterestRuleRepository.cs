@@ -6,6 +6,5 @@ public interface IInterestRuleRepository
 {
     public Task CreateOrUpdateAsync(InterestRule interestRule);
     public Task<List<InterestRule>> GetAllAsync();
-    public Task<int> GetMaximumSequenceNoAsync(DateOnly transactionDate);
 }
 
