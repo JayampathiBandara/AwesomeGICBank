@@ -3,6 +3,7 @@
 # Project Setup
 
 ## Download project from github
+- https://github.com/JayampathiBandara/AwesomeGICBank
 
 ## Restore Nuget Package
 
@@ -21,17 +22,18 @@ Set AwesomeGICBank.ConsoleClient as startup Project
 
 Go to AwesomeGICBank\\Application\\AwesomeGICBank.ConsoleClient\\appsettings.json
 
+```json
 "ConnectionStrings": {
-
-"GicBankConnection": "Data Source={YourMachineName};Initial Catalog=GicBank;Integrated Security=True; TrustServerCertificate=True;MultipleActiveResultSets=True "
-
+    "GicBankConnection": "Data Source={YourMachineName};Initial Catalog=GicBank;Integrated Security=True;TrustServerCertificate=True;MultipleActiveResultSets=True"
 }
+```
 
 Change it according to the Setup of sqlserver in your machine
-
+```
 Ex:Data Source=DESKTOP-N064N22\\\\SQLEXPRESS;
 
 Or Data Source=DESKTOP-N064N22
+```
 
 ### Run Update-Database Command in package manager console
 
@@ -39,7 +41,7 @@ Or Data Source=DESKTOP-N064N22
 2. Set AwesomeGICBank.SqlServerPersistence as Default project as mentioned in yellow box
 3. Run Update-Database
 
-# �AwesomeGIC Bank System� Design Architecture
+# **AwesomeGIC Bank System** Design Architecture
 
 ## The following architectural, design patterns were used in system development
 
