@@ -4,7 +4,8 @@ This documentation provides a comprehensive overview of the AwesomeGIC Bank Syst
 2.	Design Architecture: Details of the architectural and design patterns used in the system.
 3.	Third-Party Libraries: Information on the NuGet packages and other libraries integrated into the project.
 
-**Note: The README file does not include pictures or UI screenshots. For a detailed reference, including visuals, please refer to the System Documentation.pdf.**
+<span style="background-color: #ffeb3b">**Note: The README file does not include pictures or UI screenshots. For a detailed reference, including visuals, please refer to the System Documentation.pdf.**</span>
+
 
 # Project Setup
 
