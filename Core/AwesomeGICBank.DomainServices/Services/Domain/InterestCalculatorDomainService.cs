@@ -47,9 +47,9 @@ public class InterestCalculatorDomainService : IInterestCalculatorDomainService
             var nextTransactionDate = GetNextTransactionDate(transactions, monthEndDate, currentTransaction.Date);
             var currentRule = GetCurrentInterestRule(interestRules, currentTransaction.Date);
 
-            var interestCaluculationDate = nextTransactionDate ?? monthEndDate;
+            var nextTransactionOrMonthEndDate = nextTransactionDate ?? monthEndDate;
 
-            var nextInterestRule = GetNextInterestRule(interestRules, currentRule.Date, interestCaluculationDate);
+            var nextInterestRule = GetNextInterestRule(interestRules, currentRule.Date, nextTransactionOrMonthEndDate);
 
             if (nextTransactionDate is null && nextInterestRule is null)
             {
@@ -61,9 +61,8 @@ public class InterestCalculatorDomainService : IInterestCalculatorDomainService
                     to: monthEndDate,
                     monthEndDate: monthEndDate);
                 interest += interestUntilMonthEnd;
-                break;
+                continue;
             }
-
 
             if (nextTransactionDate.HasValue && (nextInterestRule is null || nextTransactionDate <= nextInterestRule?.Date))
             {
@@ -75,7 +74,7 @@ public class InterestCalculatorDomainService : IInterestCalculatorDomainService
                     to: nextTransactionDate!.Value,
                     monthEndDate: monthEndDate);
                 interest += interestUntilNextTransaction;
-                break;
+                continue;
             }
 
             // A rule change occurs between the current transaction and the next transaction.
@@ -87,14 +86,32 @@ public class InterestCalculatorDomainService : IInterestCalculatorDomainService
                 to: nextInterestRule!.Date,
                 monthEndDate: monthEndDate);
 
-            var interestAfterRuleChange = CalculateInterestAmount(
+            interest += interestBeforeRuleChange;
+            var fromDate = nextInterestRule!.Date;
+            var nextInterestRuleRate = nextInterestRule.Rate;
+
+            foreach (var rule in interestRules.Where(x => x.Date > nextInterestRule!.Date && x.Date <= nextTransactionOrMonthEndDate))
+            {
+                var interestForIntermediateRuleChange = CalculateInterestAmount(
                 balance: currentBalance,
-                rate: nextInterestRule.Rate,
-                from: nextInterestRule.Date,
-                to: interestCaluculationDate,
+                rate: nextInterestRuleRate,
+                from: fromDate,
+                to: rule.Date,
                 monthEndDate: monthEndDate);
 
-            interest = interestBeforeRuleChange + interestAfterRuleChange;
+                nextInterestRuleRate = rule.Rate;
+                fromDate = rule.Date;
+                interest += interestForIntermediateRuleChange;
+            }
+
+            var interestAfterRuleChange = CalculateInterestAmount(
+                balance: currentBalance,
+                rate: nextInterestRuleRate,
+                from: fromDate,
+                to: nextTransactionOrMonthEndDate,
+                monthEndDate: monthEndDate);
+
+            interest += interestAfterRuleChange;
         }
 
         decimal roundedInterest = Math.Round(interest / 365, 2, MidpointRounding.AwayFromZero);
@@ -104,7 +121,7 @@ public class InterestCalculatorDomainService : IInterestCalculatorDomainService
     private static decimal CalculateInterestAmount(decimal balance, decimal rate, DateOnly from, DateOnly to, DateOnly monthEndDate)
     {
         var numberOfDates = DateTimeHelpers.GetDateDifference(from, to);
-        if (monthEndDate == to)
+        if (from == to || monthEndDate == to)
         {
             numberOfDates++;
         }
@@ -136,7 +153,7 @@ public class InterestCalculatorDomainService : IInterestCalculatorDomainService
 
         if (interestRule == null)
         {
-            throw new Exception($"Please define interes rule on or before {CurrentTransactionDate}");
+            throw new Exception($"Please define interes rule on or before {CurrentTransactionDate:yyyyMMdd}");
         }
         return interestRule;
     }

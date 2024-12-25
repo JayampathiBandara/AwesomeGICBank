@@ -10,8 +10,9 @@ public class BankStatementInterface : BaseUserInterface
     public BankStatementInterface(IServiceProvider serviceProvider)
         : base(serviceProvider)
     {
-        Instruction = "Please enter account and month to generate the statement <Account> <Year><Month>" +
-            "\r\n(or enter blank to go back to main menu):\r\n>";
+        Instruction = "\nPlease enter account and month to generate the statement <Account> <Year><Month>" +
+            "\r\n(or enter blank to go back to main menu):" +
+            "\r\n>";
     }
 
     protected override async Task<bool> ProcessInput(string input, IMediator mediator)

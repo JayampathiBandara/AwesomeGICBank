@@ -2,7 +2,7 @@ using AwesomeGICBank.DomainServices.Services.Domain;
 using AwesomeGICBank.DomainServices.Services.Persistence;
 using Moq;
 
-namespace AwesomeGICBank.DomainServicesTests;
+namespace AwesomeGICBank.DomainServicesTests.Services.Domain;
 
 public class TransactionDomainServiceTests
 {

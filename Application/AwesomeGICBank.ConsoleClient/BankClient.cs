@@ -51,7 +51,7 @@ public class BankClient
     private void PrintWelcomeWindow()
     {
         Console.Write(
-            "Welcome to AwesomeGIC Bank! What would you like to do?\n" +
+            "\nWelcome to AwesomeGIC Bank! What would you like to do?\n" +
             "\t[T] Input transactions\n" +
             "\t[I] Define interest rules\n" +
             "\t[P] Print statement\n" +

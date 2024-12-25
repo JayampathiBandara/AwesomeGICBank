@@ -1,4 +1,10 @@
 # AwesomeGIC Bank System
+This documentation provides a comprehensive overview of the AwesomeGIC Bank System, including project setup, usage instructions, architecture, and third-party dependencies. The document is organized into the following sections:
+1.	Project Setup: Step-by-step instructions to set up the project locally.
+2.	Design Architecture: Details of the architectural and design patterns used in the system.
+3.	Third-Party Libraries: Information on the NuGet packages and other libraries integrated into the project.
+
+**Note: The README file does not include pictures or UI screenshots. For a detailed reference, including visuals, please refer to the System Documentation.pdf.**
 
 # Project Setup
 
@@ -9,7 +15,7 @@
 
 Using Package Manager Console in Visual Studio you can use any of the following
 
-- dotnet-restore
+- dotnet restore
 - Update-Package -reinstall
 
 ## Set Startup Project

@@ -9,7 +9,9 @@ namespace AwesomeGICBank.SqlServerPersistence;
 
 public static class SqlServerPersistenceServiceRegistration
 {
-    public static IServiceCollection AddSqlServerPersistenceServices(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddSqlServerPersistenceServices(
+        this IServiceCollection services,
+        IConfiguration configuration)
     {
         services.AddDbContext<AwesomeGICBankDbContext>(options =>
         {
